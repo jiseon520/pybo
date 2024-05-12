@@ -1,11 +1,20 @@
 <script>
-  let message;
+  import Router from 'svelte-spa-router'
+  import Home from "./routes/Home.svelte"
+  import Detail from "./routes/Detail.svelte"
+  import QuestionCreate from "./routes/QuestionCreate.svelte"
+  import Navigation from "./components/Navigation.svelte"
+  import UserCreate from "./routes/UserCreate.svelte"
+  import UserLogin from "./routes/UserLogin.svelte"
 
-  fetch("http://127.0.0.1:8000/hello").then((response) => {
-    response.json().then((json) => {
-      message = json.message;
-    });
-  });
+  const routes = {
+    '/': Home,
+    '/detail/:question_id': Detail,
+    '/question-create': QuestionCreate,
+    '/user-create': UserCreate,
+    '/user-login': UserLogin,
+  }
 </script>
 
-<h1>{message}</h1>
+<Navigation />
+<Router {routes}/>
