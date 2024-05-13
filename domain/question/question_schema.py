@@ -47,6 +47,3 @@ class QuestionDelete(BaseModel):
 
 class QuestionVote(BaseModel):
     question_id: int
-
-class QuestionHits(BaseModel):
-    question_id: int
