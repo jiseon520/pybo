@@ -69,3 +69,12 @@ def question_vote(_question_vote: question_schema.QuestionVote, db: Session = De
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="데이터를 찾을수 없습니다.")
     question_crud.vote_question(db, db_question=db_question, db_user=current_user)
+
+
+@router.post("/views", status_code=status.HTTP_204_NO_CONTENT)
+def question_views(_question_views: question_schema.QuestionViews, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db_question = question_crud.get_question(db, question_id=_question_views.question_id)
+    if not db_question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="데이터를 찾을수 없습니다.")
+    question_crud.views_question(db, db_question=db_question)    

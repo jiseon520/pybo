@@ -102,6 +102,20 @@
             }
         )
     }
+
+    function hits_question(_question_id) {
+        let url = "/api/question/hits"
+        let params = {
+            question_id: _question_id
+        }
+        fastapi('post', url, params, 
+            (json) => {
+                get_question()
+            },
+            (err_json) => {
+                
+            })
+    }
 </script>
 
 

@@ -57,6 +57,6 @@ def vote_question(db: Session, db_question: Question, db_user: User):
     db.commit()
 
 
-def hits_question(db: Session, db_question: Question):
-    db_question.hits += 1
+def views_question(db: Session, db_question: Question):
+    db_question.views += 1
     db.commit()

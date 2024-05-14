@@ -15,7 +15,8 @@ class Question(BaseModel):
     user: User | None
     modify_date: datetime.datetime | None = None
     voter: list[User] = []
-    hits: int | None = 0
+    views: int | None
+
 
 class QuestionCreate(BaseModel):
     subject: str
@@ -37,3 +38,7 @@ class QuestionDelete(BaseModel):
 
 class QuestionVote(BaseModel):
     question_id: int
+
+class QuestionViews(BaseModel):
+    question_id: int
+    
