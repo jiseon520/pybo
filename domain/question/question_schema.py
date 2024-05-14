@@ -1,6 +1,6 @@
 import datetime
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 from domain.answer.answer_schema import Answer
 from domain.user.user_schema import User
@@ -15,21 +15,11 @@ class Question(BaseModel):
     user: User | None
     modify_date: datetime.datetime | None = None
     voter: list[User] = []
-
-
-    class Config:
-        orm_mode = True
-
+    hits: int | None = 0
 
 class QuestionCreate(BaseModel):
     subject: str
     content: str
-
-    @validator('subject', 'content')
-    def not_empty(cls, v):
-        if not v or not v.strip():
-            raise ValueError('빈 값은 허용되지 않습니다.')
-        return v
 
 
 class QuestionList(BaseModel):
@@ -46,8 +36,4 @@ class QuestionDelete(BaseModel):
     
 
 class QuestionVote(BaseModel):
-    question_id: int
-
-
-class QuestionHits(BaseModel):
     question_id: int

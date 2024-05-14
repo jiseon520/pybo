@@ -6,8 +6,6 @@ from models import Question, User, Answer
 from sqlalchemy.orm import Session
 
 
-
-
 def get_question_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = ''):
     question_list = db.query(Question)
     if keyword:
@@ -53,7 +51,12 @@ def delete_question(db: Session, db_question: Question):
     db.delete(db_question)
     db.commit()
 
+
 def vote_question(db: Session, db_question: Question, db_user: User):
     db_question.voter.append(db_user)
     db.commit()
-    
+
+
+def hits_question(db: Session, db_question: Question):
+    db_question.hits += 1
+    db.commit()
