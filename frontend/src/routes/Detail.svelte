@@ -102,20 +102,6 @@
             }
         )
     }
-
-    function hits_question(_question_id) {
-        let url = "/api/question/hits"
-        let params = {
-            question_id: _question_id
-        }
-        fastapi('post', url, params, 
-            (json) => {
-                get_question()
-            },
-            (err_json) => {
-                
-            })
-    }
 </script>
 
 
@@ -124,6 +110,9 @@
     <h2 class="border-bottom py-2">{question.subject}</h2>
     <div class="card my-3">
         <div class="card-body">
+            <div class="d-flex justify-content-end">
+                <div class="mb-2">조회수 {question.views}</div>
+            </div>
             <div class="card-text">
                 {@html marked.parse(question.content)}
             </div>
@@ -136,7 +125,7 @@
                 {/if}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{ question.user ? question.user.username : ""}</div>
-                    <div>{moment(question.create_date).format("M/D a h:m")}</div>        
+                    <div class="mb-2">{moment(question.create_date).format("YY/M/D a h:m")}</div>
                 </div>
             </div>            
             <div class="my-3">

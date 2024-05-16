@@ -9,7 +9,6 @@
     let size = 10
     let total = 0
     let kw = ''
-    let views = 0;
     $: total_page = Math.ceil(total/size)
 
     function get_question_list() {
@@ -27,14 +26,18 @@
 
     $:$page, $keyword, get_question_list()
 
-    async function incrementviews(questionId, index) {
-        try {
-            await fastapi('post', '/api/question/views', { question_id: questionId });
-            question_list[index].views += 1;
-        } catch (error) {
-            console.error('Failed to increment views', error);
-            alert('Failed to increment views');
+    function views_question(_question_id) {
+        let url = "/api/question/views"
+        let params = {
+            question_id: _question_id
         }
+        fastapi('post', url, params, 
+            (json) => {
+                get_question()
+            },
+            (err_json) => {
+                
+            })
     }
 </script>
 
@@ -69,7 +72,7 @@
         <tr class="text-center">
             <td>{ total - ($page * size) - i }</td>
             <td class="text-start">
-                <a use:link href="/detail/{question.id}" on:click={() => incrementviews(question.id, i)}>
+                <a use:link href="/detail/{question.id}" on:click={() => views_question(question.id, i)}>
                     {question.subject}
                 </a>
                 {#if question.answers.length > 0 }

@@ -41,7 +41,7 @@ def question_update(_question_update: question_schema.QuestionUpdate,
     db_question = question_crud.get_question(db, question_id=_question_update.question_id)
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="데이터를 찾을수 없습니다.")
+                            detail="데이터를 찾을 수 없습니다.")
     if current_user.id != db_question.user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="수정 권한이 없습니다.")
@@ -55,7 +55,7 @@ def question_delete(_question_delete: question_schema.QuestionDelete,
     db_question = question_crud.get_question(db, question_id=_question_delete.question_id)
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="데이터를 찾을수 없습니다.")
+                            detail="데이터를 찾을 수 없습니다.")
     if current_user.id != db_question.user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="삭제 권한이 없습니다.")
@@ -67,7 +67,7 @@ def question_vote(_question_vote: question_schema.QuestionVote, db: Session = De
     db_question = question_crud.get_question(db, question_id=_question_vote.question_id)
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="데이터를 찾을수 없습니다.")
+                            detail="데이터를 찾을 수 없습니다.")
     question_crud.vote_question(db, db_question=db_question, db_user=current_user)
 
 
@@ -76,5 +76,5 @@ def question_views(_question_views: question_schema.QuestionViews, db: Session =
     db_question = question_crud.get_question(db, question_id=_question_views.question_id)
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="데이터를 찾을수 없습니다.")
+                            detail="데이터를 찾을 수 없습니다.")
     question_crud.views_question(db, db_question=db_question)    
