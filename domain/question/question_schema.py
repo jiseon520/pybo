@@ -39,6 +39,7 @@ class QuestionDelete(BaseModel):
 class QuestionVote(BaseModel):
     question_id: int
 
+
 class QuestionViews(BaseModel):
     question_id: int
     

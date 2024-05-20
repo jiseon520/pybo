@@ -38,6 +38,12 @@
         )
     }
 
+    function get_answers() {
+        fastapi("get", "/api/answer/list/" + question_id, {}, (json) => {
+            question.answers = json
+        })
+    }
+
     
     function delete_question(_question_id) {
         if(window.confirm('정말로 삭제하시겠습니까?')) {
@@ -150,6 +156,7 @@
 
     <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{question.answers.length}개의 답변이 있습니다.</h5>
+    
     {#each question.answers as answer}
     <div class="card my-3">
         <div class="card-body">
