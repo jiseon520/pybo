@@ -29,3 +29,8 @@ class AnswerDelete(BaseModel):
 class AnswerVote(BaseModel):
     answer_id: int
     
+
+class AnswerList(BaseModel):
+    total: int
+    answers: list[Answer] = []
+    

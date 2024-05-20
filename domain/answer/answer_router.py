@@ -23,11 +23,20 @@ def answer_create(question_id: int, _answer_create: answer_schema.AnswerCreate, 
     answer_crud.create_answer(db, question=question, answer_create=_answer_create, user=current_user)
 
 
+@router.get("/detail/{answer_id}", response_model=answer_schema.AnswerList)
+def answer_detail(answer_id: int, db: Session = Depends(get_db), page: int = 1, size: int = 10):
+    total, _answer_list = answer_crud.get_answer(db, answer_id=answer_id, page=page*size, limit=size)
+    return {
+        'total': total,
+        'answer_list': _answer_list
+    }
+
+'''
 @router.get("/detail/{answer_id}", response_model=answer_schema.Answer)
 def answer_detail(answer_id: int, db: Session = Depends(get_db)):
     answer = answer_crud.get_answer(db, answer_id=answer_id)
     return answer
-
+'''
 
 @router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
 def answer_update(_answer_update: answer_schema.AnswerUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

@@ -159,7 +159,7 @@
             <div class="d-flex justify-content-end">
                 {#if answer.modify_date }
                 <div class="badge bg-light text-dark p-2 text-start mx-3">
-                    <div class="mb-2">modified at</div>
+                    <div class="mb-2">수정</div>
                     <div>{moment(answer.modify_date).format("M/D a h:m")}</div>
                 </div>
                 {/if}
