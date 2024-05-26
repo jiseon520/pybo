@@ -32,5 +32,5 @@ class AnswerVote(BaseModel):
 
 class AnswerList(BaseModel):
     total: int
-    answers: list[Answer] = []
+    answer_list: list[Answer] = []
     

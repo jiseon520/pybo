@@ -12,6 +12,11 @@
     let question = {answers:[], voter:[], content: ''}
     let content = ""
     let error = {detail:[]}
+    let answer_size = 10
+    let answer_page = 0
+    let answer_total = 0
+    $: answer_total_page = Math.ceil(answer_total/answer_size)
+
 
     function get_question() {
         fastapi("get", "/api/question/detail/" + question_id, {}, (json) => {
@@ -38,12 +43,19 @@
         )
     }
 
-    function get_answers() {
-        fastapi("get", "/api/answer/list/" + question_id, {}, (json) => {
-            question.answers = json
+    function get_answer_list(_page) {
+        let answer_params = {
+            page: _page,
+            size: answer_size,
+        }
+        fastapi("get", "/api/answer/list/" + question_id, answer_params, (json) => {
+            question.answers = json.answer_list
+            answer_page = _page
+            answer_total = json.total
         })
     }
 
+    get_answer_list(0)
     
     function delete_question(_question_id) {
         if(window.confirm('정말로 삭제하시겠습니까?')) {
@@ -156,7 +168,6 @@
 
     <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{question.answers.length}개의 답변이 있습니다.</h5>
-    
     {#each question.answers as answer}
     <div class="card my-3">
         <div class="card-body">
@@ -176,9 +187,7 @@
                 </div>
             </div>
             <div class="my-3">
-                <button class="btn btn-sm btn-outline-secondary"
-                    on:click="{vote_answer(answer.id)}"> 
-                    추천
+                <button class="btn btn-sm btn-outline-secondary" on:click="{vote_answer(answer.id)}"> 추천
                     <span class="badge rounded-pill bg-success">{ answer.voter.length }</span>
                 </button>
                 {#if answer.user && $username === answer.user.username }
@@ -187,10 +196,29 @@
                 <button class="btn btn-sm btn-outline-secondary"
                 on:click={() => delete_answer(answer.id) }>삭제</button>
                 {/if}
-            </div>
+            </div> 
         </div>
-    </div>
+    </div> 
     {/each}
+
+    <!-- 답변 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        <li class="page-item {answer_page <= 0 && 'disabled'}">
+            <button class="page-link" on:click="{() => get_answer_list(answer_page-1)}">이전</button>
+        </li>
+        <!-- 페이지번호 -->
+        {#each Array(answer_total_page) as _, loop_page}
+        <li class="page-item {loop_page === answer_page && 'active'}">
+            <button on:click="{() => answer_page = loop_page}" class="page-link">{loop_page+1}</button>
+        </li>
+        {/each}
+        <!-- 다음페이지 -->
+        <li class="page-item {answer_page >= answer_total_page-1 && 'disabled'}">
+            <button class="page-link" on:click="{() => answer_page+1}">다음</button>
+        </li>
+    </ul>
+
     <!-- 답변 등록 -->
     <Error error={error} />
     <form method="post" class="my-3">

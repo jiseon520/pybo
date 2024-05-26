@@ -15,17 +15,21 @@ router = APIRouter(
 
 @router.post("/create/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
 def answer_create(question_id: int, _answer_create: answer_schema.AnswerCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-
-    # create answer
     question = question_crud.get_question(db, question_id=question_id)
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     answer_crud.create_answer(db, question=question, answer_create=_answer_create, user=current_user)
 
 
-@router.get("/detail/{answer_id}", response_model=answer_schema.AnswerList)
-def answer_detail(answer_id: int, db: Session = Depends(get_db), page: int = 1, size: int = 10):
-    total, _answer_list = answer_crud.get_answer(db, answer_id=answer_id, page=page*size, limit=size)
+@router.get("/detail/{answer_id}", response_model=answer_schema.Answer)
+def answer_detail(answer_id: int, db: Session = Depends(get_db)):
+    answer = answer_crud.get_answer(db, answer_id=answer_id)
+    return answer
+
+
+@router.get("/list/{question_id}", response_model=answer_schema.Answer)
+def answer_list(question_id: int, db: Session = Depends(get_db), page: int = 0, size: int = 10):
+    total, _answer_list = answer_crud.get_answer_list(db, question_id=question_id, skip=page * size, limit=size)
     return {
         'total': total,
         'answer_list': _answer_list
